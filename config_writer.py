@@ -38,8 +38,8 @@ class ConfigWriter:
         self.ggX = "ggA" if MA > MH else "ggH"
         self.MA = MA
         self.MH = MH
-        self.tanb = tanb
-        self.sinba = sinba
+        self.tanb = round(tanb, 3)
+        self.sinba = round(sinba, 5)
         # Load paramters from config.yaml
         self.params = ParamConfig()
         # Definitions
