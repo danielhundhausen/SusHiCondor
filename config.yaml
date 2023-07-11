@@ -1,0 +1,33 @@
+# manually change active mode
+# then run condor_make_submit.py and then condor.submit
+active_mode: MA-TANB
+
+# general parameters
+# ggX: does not have to be specified, is set to the boson with high mass
+thdm_type: "2"
+sm_higgs_mass: 125
+
+MA-MH:
+  sinba: 0.99995
+  mass_range: [330, 2500]
+  stepsize_massgrid: 5
+  values_tanb: [1]
+  points_per_job: 60
+
+MA-TANB:
+  sinba: 0.99995
+  values_mh: [400]
+  ma_range: [330, 2500]
+  tanb_range: [.4, 3]
+  stepsize_ma: 5
+  stepsize_tanb: .1
+  points_per_job: 20
+
+TANB-SINBA:
+  ma: 600
+  mh: 400
+  tanb_range: [.4, 3]
+  sinba_range: [.8, 1.2]
+  stepsize_tanb: .1
+  stepsize_sinba: .1
+  points_per_job: 20

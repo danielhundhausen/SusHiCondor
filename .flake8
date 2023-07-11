@@ -1,0 +1,10 @@
+[flake8]
+max-complexity = 10
+max-line-length = 120
+max-doc-length = 72
+ignore = W391,W503,E501 
+per-file-ignores =
+    config_generator.py:E402
+exclude =
+    .git,
+    __pycache__,
