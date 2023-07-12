@@ -11,6 +11,8 @@ PARAMS = ParamConfig()
 
 
 def write_and_run(MA, MH, tanb, sinba):
+    tanb = round(tanb, 3)
+    sinba = round(sinba, 5)
     writer = ConfigWriter(MA, MH, tanb=tanb, sinba=sinba)
     ggX = writer.write_config()
     # Run SusHi
@@ -23,7 +25,7 @@ def write_and_run(MA, MH, tanb, sinba):
 
 def run_MA_MH(MA: int, MH_min: int, tanb: float, sinba: float):
     params = PARAMS["MA-MH"]
-    for MH in range(MH_min, MH_min + params["stepsize_massgrid"] * params["points_per_job"] + 1e-10, params["stepsize_massgrid"]):
+    for MH in range(MH_min, MH_min + params["stepsize_massgrid"] * params["points_per_job"] + 1, params["stepsize_massgrid"]):
         print(f"Generatring SusHi .in file for {MA}/{MH} ...")
         write_and_run(MA, MH, tanb, sinba)
 

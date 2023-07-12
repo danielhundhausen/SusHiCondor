@@ -18,7 +18,7 @@ class ParamConfig:
     def __init__(self):
         with open("config.yaml", 'r') as f:
             self.params = yaml.load(f, Loader=yaml.Loader)
-        
+
         for k, v in self.params.items():
             setattr(self, k, v)
 
@@ -38,8 +38,8 @@ class ConfigWriter:
         self.ggX = "ggA" if MA > MH else "ggH"
         self.MA = MA
         self.MH = MH
-        self.tanb = round(tanb, 3)
-        self.sinba = round(sinba, 5)
+        self.tanb = tanb
+        self.sinba = sinba
         # Load paramters from config.yaml
         self.params = ParamConfig()
         # Definitions
@@ -143,6 +143,8 @@ class ConfigWriter:
         )
 
     def write_config(self):
-        with open(f"{CONFIG_DIR}/{self.ggX}_MA-{int(self.MA)}_MH-{int(self.MH)}_tanb{self.tanb}_sinba{self.sinba}.in", "w") as f:
+        fname = f"{self.ggX}_MA-{int(self.MA)}_MH-{int(self.MH)}_tanb{self.tanb}_sinba{self.sinba}.in"
+        print(fname)
+        with open(os.path.join(CONFIG_DIR, fname), "w") as f:
             f.write(self.config_string)
         return self.ggX

@@ -11,8 +11,8 @@ if mode == "MA-MH":
     params = params["MA-MH"]
     job_args = [
         (MA, MH, tanb, params["sinba"])
-        for MA in np.arange(params["mass_range"][0], params["mass_range"][1] + 1, params["stepsize_massgrid"])
-        for MH in np.arange(params["mass_range"][0], params["mass_range"][1] + 1, int(params["stepsize_massgrid"] * params["points_per_job"]))
+        for MA in range(params["mass_range"][0], params["mass_range"][1] + 1, params["stepsize_massgrid"])
+        for MH in range(params["mass_range"][0], params["mass_range"][1] + 1, int(params["stepsize_massgrid"] * params["points_per_job"]))
         for tanb in params["values_tanb"]
     ]
     cmd_args = []
@@ -24,8 +24,8 @@ if mode == "MA-TANB":
     params = params["MA-TANB"]
     job_args = [
         (MA, MH, tanb, params["sinba"])
-        for MA in np.arange(params["ma_range"][0], params["ma_range"][1] + 1, params["stepsize_ma"])
-        for tanb in np.arange(params["tanb_range"][0], params["tanb_range"][1] + 1, params["stepsize_tanb"] * params["points_per_job"])
+        for MA in range(params["ma_range"][0], params["ma_range"][1] + 1, params["stepsize_ma"])
+        for tanb in np.arange(params["tanb_range"][0], params["tanb_range"][1] + 1e-10, params["stepsize_tanb"] * params["points_per_job"])
         for MH in params["values_mh"]
     ]
     cmd_args = []
@@ -36,9 +36,10 @@ if mode == "MA-TANB":
 if mode == "TANB-SINBA":
     params = params["TANB-SINBA"]
     job_args = [
-        (params["MA"], params["MH"], tanb, sinba)
-        for tanb in np.arange(params["tanb_range"][0], params["tanb_range"][1] + 1, params["stepsize_tanb"])
-        for sinba in np.arange(params["sinba_range"][0], params["sinba_range"][1] + 1, params["stepsize_sinba"] * params["points_per_job"])
+        (params["ma"], params["mh"], tanb, sinba)
+        for tanb in np.around(np.arange(params["tanb_range"][0], params["tanb_range"][1] + 1e-10, params["stepsize_tanb"]), decimals=3)
+        for sinba in np.around(np.arange(params["sinba_range"][0],
+          params["sinba_range"][1] + 1e-10, params["stepsize_sinba"] * params["points_per_job"]), decimals=5)
     ]
     cmd_args = []
     for args in job_args:
@@ -51,16 +52,15 @@ condor_submit = (
     "universe          = vanilla\n"
     "# Running in local mode with 4 cpu slots\n"
     "request_cpus      = 4\n"
-    "notification      = Error\n"
     "initialdir        = /nfs/dust/cms/user/hundhad/SusHi-1.7.0/\n"
-    "output            = condor_logs/$(MA)-$(MH).o\n"
-    "error             = condor_logs/$(MA)-$(MH).e\n"
-    "log               = condor_logs/$(MA).log\n"
+    "output            = condor_logs/$(MA)-$(MH)-$(tanb).o\n"
+    "error             = condor_logs/$(MA)-$(MH)-$(tanb).e\n"
+    "log               = condor_logs/$(MA)-$(MH)-$(tanb).log\n"
     "# Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered\n"
     # "getenv            = True\n"
     "RequestMemory     = 2G\n"
     "RequestDisk       = 2G\n"
-    "JobBatchName      = SusHiJobs\n"
+    f"JobBatchName      = SusHi_{mode}\n"
     "executable = /nfs/dust/cms/user/hundhad/SusHi-1.7.0/condor_run_sushi.sh\n"
     f"arguments         = $(MA) $(MH) $(tanb) $(sinba)\n"
     f"queue MA, MH, tanb, sinba from ({''.join(cmd_args)})\n"
