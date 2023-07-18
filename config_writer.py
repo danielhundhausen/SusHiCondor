@@ -34,29 +34,29 @@ class ConfigWriter:
         "ggA": 21,
     }
 
-    def __init__(self, MA, MH, tanb, sinba):
+    def __init__(self, MA: int, MH: int, tanb: float, sinba: float) -> None:
         self.ggX = "ggA" if MA > MH else "ggH"
-        self.MA = MA
-        self.MH = MH
-        self.tanb = tanb
-        self.sinba = sinba
+        self.MA: int = MA
+        self.MH: int = MH
+        self.tanb: float = tanb
+        self.sinba: float = sinba
         # Load paramters from config.yaml
         self.params = ParamConfig()
         # Definitions
-        self.MC = np.max(MA, MH)
-        self.beta = np.arctan(tanb)
+        self.MC: int = max(MA, MH)
+        self.beta: float = np.arctan(tanb)
 
     @property
-    def m12(self):
+    def m12(self) -> float:
         # Choice of m12 suggested by Thomas Biekoetter
-        return np.sqrt(np.max(self.MA, self.MH) ** 2 * np.sin(self.beta) * np.cos(self.beta))
+        return np.sqrt(min(self.MA, self.MH) ** 2 * np.sin(self.beta) * np.cos(self.beta))
 
     @property
-    def ggXID(self):
+    def ggXID(self) -> int:
         return self.ggX_ID_map[self.ggX]
 
     @property
-    def config_string(self):
+    def config_string(self) -> str:
         return (
             f"Block SUSHI\n"
             f"  1   2         # model: 0 = SM, 1 = MSSM, 2 = 2HDM, 3 = NMSSM\n"
@@ -142,8 +142,8 @@ class ConfigWriter:
             f"  3   1.d0  # b\n"
         )
 
-    def write_config(self):
-        fname = f"type{self.params.thdm_type}_{self.ggX}_MA-{int(self.MA)}_MH-{int(self.MH)}_tanb{self.tanb}_sinba{self.sinba}.in"
+    def write_config(self) -> str:
+        fname = f"t{self.params.thdm_type}_{self.ggX}_MA-{int(self.MA)}_MH-{int(self.MH)}_tb{self.tanb}_sba{self.sinba}.in"
         print(fname)
         with open(os.path.join(CONFIG_DIR, fname), "w") as f:
             f.write(self.config_string)
