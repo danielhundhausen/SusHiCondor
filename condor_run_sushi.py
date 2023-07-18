@@ -18,8 +18,8 @@ def write_and_run(MA, MH, tanb, sinba):
     # Run SusHi
     os.system(
         f"./bin/sushi "
-        f"{CONFIG_DIR}/{ggX}_MA-{MA}_MH-{MH}_tanb{tanb}_sinba{sinba}.in "
-        f"{OUTPUT_DIR}/{ggX}_MA-{MA}_MH-{MH}_tanb{tanb}_sinba{sinba}.out"
+        f"{CONFIG_DIR}/type{PARAMS.thdm_type}_{ggX}_MA-{MA}_MH-{MH}_tanb{tanb}_sinba{sinba}.in "
+        f"{OUTPUT_DIR}/type{PARAMS.thdm_type}_{ggX}_MA-{MA}_MH-{MH}_tanb{tanb}_sinba{sinba}.out"
     )
 
 

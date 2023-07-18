@@ -43,13 +43,13 @@ class ConfigWriter:
         # Load paramters from config.yaml
         self.params = ParamConfig()
         # Definitions
-        self.MC = MA
+        self.MC = np.max(MA, MH)
         self.beta = np.arctan(tanb)
 
     @property
     def m12(self):
         # Choice of m12 suggested by Thomas Biekoetter
-        return np.sqrt(self.MH ** 2 * np.sin(self.beta) * np.cos(self.beta))
+        return np.sqrt(np.max(self.MA, self.MH) ** 2 * np.sin(self.beta) * np.cos(self.beta))
 
     @property
     def ggXID(self):
@@ -143,7 +143,7 @@ class ConfigWriter:
         )
 
     def write_config(self):
-        fname = f"{self.ggX}_MA-{int(self.MA)}_MH-{int(self.MH)}_tanb{self.tanb}_sinba{self.sinba}.in"
+        fname = f"type{self.params.thdm_type}_{self.ggX}_MA-{int(self.MA)}_MH-{int(self.MH)}_tanb{self.tanb}_sinba{self.sinba}.in"
         print(fname)
         with open(os.path.join(CONFIG_DIR, fname), "w") as f:
             f.write(self.config_string)
